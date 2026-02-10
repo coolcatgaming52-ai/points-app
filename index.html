@@ -1,14 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Points App</title>
+
+<!-- Firebase compat SDKs -->
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
+<style>
+body {
+  font-family: Arial;
+  background: #111;
+  color: white;
+  padding: 20px;
+}
+button {
+  padding: 10px;
+  font-size: 16px;
+}
+</style>
+</head>
+
+<body>
+
+<h2>Points App</h2>
+
+<button id="loginBtn">Login with Google</button>
+<p id="status">Not logged in</p>
+<p>Points: <b id="points">0</b></p>
 
 <script>
-// 🔥 FIREBASE CONFIG (REPLACE THIS)
+/* 🔥 YOUR FIREBASE CONFIG */
 const firebaseConfig = {
-  apiKey: "1:785089329533:web:5dfa3ce224cfacce84b414",
+  apiKey: "AIzaSyBzwYfCLMzDHaeANrBkauMNbCsEHXGcCi8",
   authDomain: "point-80208.firebaseapp.com",
   projectId: "point-80208",
   storageBucket: "point-80208.firebasestorage.app",
   messagingSenderId: "785089329533",
   appId: "1:785089329533:web:5dfa3ce224cfacce84b414"
 };
+
+/* ✅ INITIALIZE FIREBASE */
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+
+/* SIMPLE DEMO LOGIC */
+let points = 0;
+
+document.getElementById("loginBtn").onclick = () => {
+  const provider = new firebase.auth.GoogleAuthProvider();
+  auth.signInWithPopup(provider);
+};
+
+auth.onAuthStateChanged(user => {
+  if (user) {
+    document.getElementById("status").innerText =
+      "Logged in as " + user.displayName;
+
+    // Proof it works: points go up
+    setInterval(() => {
+      points++;
+      document.getElementById("points").innerText = points;
+    }, 1000);
+  }
+});
+</script>
+
+</body>
+</html>
